@@ -4,10 +4,11 @@ import {Link} from 'react-router-dom';
 interface Props {
   author: string;
   message: string;
-  onDelete: () => void;
+  id: string;
+  onDelete: (id: string) => void;
 }
 
-const QuoteItem:React.FC<Props> = ({message, author, onEdit, onDelete}) => {
+const MemoQuoteItem: React.FC<Props> = React.memo(function QuoteItem({message, author, id, onDelete}) {
   return (
     <div className="border border-2 border-info rounded d-flex justify-content-between p-3">
       <div>
@@ -15,11 +16,13 @@ const QuoteItem:React.FC<Props> = ({message, author, onEdit, onDelete}) => {
         <span className="fw-bold">- {author}</span>
       </div>
       <div>
-        <button className="btn btn-outline-danger m-2">Delete</button>
+        <button className="btn btn-outline-danger m-2" onClick={() => onDelete(id)}>Delete</button>
         <Link to="/" className="btn btn-outline-info">Edit</Link>
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  return prevProps.author === nextProps.author && prevProps.message === nextProps.message;
+});
 
-export default QuoteItem;
+export default MemoQuoteItem;
