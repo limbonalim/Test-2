@@ -12,7 +12,7 @@ interface Props {
 const MemoQuoteForm: React.FC<Props> = ({onSubmit, onEdit, editQuote}) => {
   const [post, setPost] = useState<ApiQuotes>({
     author: '',
-    category: '',
+    category: 'star-wars',
     text: '',
   });
   const [button, setButton] = useState<string>('Add');
