@@ -12,9 +12,9 @@ interface Props {
 
 const QuoteList: React.FC<Props> = ({getError}) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [quotes, setQuotes] = useState<Quotes[]>([]);
   const params = useParams();
   let url: string = '/quotes.json';
-  const [quotes, setQuotes] = useState<Quotes[]>([]);
 
   if (params.category) {
     url = `/quotes.json?orderBy="category"&equalTo="${params.category}"`;
@@ -53,7 +53,7 @@ const QuoteList: React.FC<Props> = ({getError}) => {
     }
   };
 
-  const list = quotes.map((item) => (
+  const list = quotes.map((item: Quotes) => (
     <MemoQuoteItem
       key={item.id}
       id={item.id}

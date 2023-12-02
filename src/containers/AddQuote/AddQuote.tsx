@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import QuoteForm from '../../components/QuoteForm/QuoteForm';
 import {ApiQuotes} from '../../types';
 import axiosApi from '../../axios-api';
-import {useNavigate, useParams} from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 
 interface Props {

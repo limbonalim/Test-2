@@ -2,6 +2,7 @@ import React from 'react';
 import {NavLink, Outlet, useParams} from 'react-router-dom';
 import QuoteList from '../../components/QuoteList/QuoteList';
 import {categories} from '../../constans';
+import {Constants} from '../../types';
 
 interface Props {
   getError: (message: string) => void;
@@ -9,7 +10,7 @@ interface Props {
 
 const Home: React.FC<Props> = ({getError}) => {
   const params = useParams();
-  const listOfLink = categories.map((item) => {
+  const listOfLink = categories.map((item: Constants) => {
     const link: string = `quotes/${item.id}`;
     return (
       <NavLink key={item.id} to={link} className="list-group-item">{item.title}</NavLink>

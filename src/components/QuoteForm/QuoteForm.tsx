@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import {categories} from '../../constans';
 import {ApiQuotes, Constants} from '../../types';
-import {useParams} from 'react-router-dom';
 
 interface Props {
   onSubmit: (quote: ApiQuotes) => void;
