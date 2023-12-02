@@ -59,11 +59,11 @@ const AddQuote: React.FC<Props> = ({getError}) => {
   };
 
 
-    useEffect(() => {
-      if (params.id) {
-        void getQuote();
-      }
-    }, [params.id]);
+  useEffect(() => {
+    if (params.id) {
+      void getQuote();
+    }
+  }, [params.id]);
 
 
   return (
