@@ -35,6 +35,7 @@ const QuoteList = () => {
   const onDelete = async (id: string) => {
     try {
       await axiosApi.delete(`/quotes/${id}.json`);
+      void getItems();
     } catch (error: Error) {
       console.log(error);
     }

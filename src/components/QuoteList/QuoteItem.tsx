@@ -9,6 +9,8 @@ interface Props {
 }
 
 const MemoQuoteItem: React.FC<Props> = React.memo(function QuoteItem({message, author, id, onDelete}) {
+  const link = `/quotes/${id}/edit`;
+
   return (
     <div className="border border-2 border-info rounded d-flex justify-content-between p-3">
       <div>
@@ -17,7 +19,7 @@ const MemoQuoteItem: React.FC<Props> = React.memo(function QuoteItem({message, a
       </div>
       <div>
         <button className="btn btn-outline-danger m-2" onClick={() => onDelete(id)}>Delete</button>
-        <Link to="/" className="btn btn-outline-info">Edit</Link>
+        <Link to={link} className="btn btn-outline-info">Edit</Link>
       </div>
     </div>
   );

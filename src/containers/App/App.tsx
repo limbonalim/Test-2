@@ -20,10 +20,13 @@ const App = () => {
               <QuoteList/>
             )}/>
           </Route>
-
+          <Route path="/quotes/:id/edit" element={(
+            <AddQuote title="Edit Quote"/>
+          )}/>
           <Route path="/add-quote" element={(
             <AddQuote/>
           )}/>
+          <Route path="*" element={<h1>404 Not Found!</h1>}/>
         </Routes>
       </main>
     </>

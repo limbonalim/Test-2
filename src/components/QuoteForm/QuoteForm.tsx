@@ -1,17 +1,43 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useCallback, useEffect, useState} from 'react';
 import {categories} from '../../constans';
 import {ApiQuotes, Constants} from '../../types';
+import {useParams} from 'react-router-dom';
 
 interface Props {
   onSubmit: (quote: ApiQuotes) => void;
+  onEdit: (quote: ApiQuotes) => void;
+  editQuote?: ApiQuotes;
 }
 
-const QuoteForm: React.FC<Props> = ({onSubmit}) => {
+const MemoQuoteForm: React.FC<Props> = React.memo(function QuoteForm({onSubmit, onEdit, editQuote}) {
   const [post, setPost] = useState<ApiQuotes>({
     author: '',
     category: '',
     text: '',
   });
+  const [button, setButton] = useState<string>('Add');
+
+  let params = useParams();
+  console.log(params);
+
+  if (params.id) {
+    const getEditPost = useCallback(() => {
+      setButton('Edit');
+      setPost(prevState => {
+        return {
+          ...prevState,
+          author: editQuote.author,
+          category: editQuote.category,
+          text: editQuote.text
+        };
+      });
+
+    }, [editQuote.author, editQuote.text]);
+    useEffect(() => {
+      void getEditPost();
+    }, [getEditPost]);
+  }
+
 
   const listOfOptions = categories.map((item: Constants) => (
     <option key={item.id} value={item.id}>{item.title}</option>
@@ -27,15 +53,18 @@ const QuoteForm: React.FC<Props> = ({onSubmit}) => {
 
   const onFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    onSubmit(post);
-    setPost(prevState => {
-      return {
+    if (editQuote.author && editQuote.text) {
+      onEdit(post);
+    } else {
+      onSubmit(post);
+    }
+    setPost(
+      {
         author: '',
         category: '',
         text: '',
-      };
-    });
-    event.target[0].value = '';
+      }
+    );
   };
 
   return (
@@ -44,12 +73,13 @@ const QuoteForm: React.FC<Props> = ({onSubmit}) => {
         <label htmlFor="category" className="form-label">Category:</label>
         <select
           onChange={onChange}
+          value={post.category}
+          defaultValue=""
           required
           id="category"
           name="category"
           className="form-select"
           aria-label="Category"
-          defaultValue=""
         >
           <option value="" disabled>Select Category</option>
           {listOfOptions}
@@ -81,9 +111,9 @@ const QuoteForm: React.FC<Props> = ({onSubmit}) => {
           rows="3"
         ></textarea>
       </div>
-      <button className="btn btn-outline-success">Add</button>
+      <button className="btn btn-outline-success">{button}</button>
     </form>
   );
-};
+});
 
-export default QuoteForm;
+export default MemoQuoteForm;
