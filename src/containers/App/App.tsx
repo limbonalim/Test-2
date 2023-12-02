@@ -35,7 +35,7 @@ const App = () => {
             )}/>
           </Route>
           <Route path="/quotes/:id/edit" element={(
-            <AddQuote title="Edit Quote" getError={getError}/>
+            <AddQuote getError={getError}/>
           )}/>
           <Route path="/add-quote" element={(
             <AddQuote getError={getError}/>

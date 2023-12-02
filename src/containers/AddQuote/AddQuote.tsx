@@ -6,37 +6,20 @@ import {useNavigate, useParams} from 'react-router-dom';
 import Loading from '../../components/Loading/Loading';
 
 interface Props {
-  title?: string;
   getError: (message: string) => void;
 }
 
-const AddQuote: React.FC<Props> = ({title = 'New Quote', getError}) => {
+const AddQuote: React.FC<Props> = ({getError}) => {
   const [editQuote, setEditQuote] = useState<ApiQuotes>({
     category: '',
     author: '',
     text: '',
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const params = useParams();
+  const [title, setTitle] = useState<string>('Add Quote');
   const navigate = useNavigate();
+  const params = useParams();
 
-
-  if (params.id) {
-    const getQuote = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosApi.get<ApiQuotes>(`/quotes/${params.id}.json`);
-        setEditQuote(response.data);
-      } catch (error: Error) {
-        getError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    useEffect(() => {
-      void getQuote();
-    }, []);
-  }
 
   const onSubmit = async (quote: ApiQuotes) => {
     try {
@@ -61,6 +44,27 @@ const AddQuote: React.FC<Props> = ({title = 'New Quote', getError}) => {
       setLoading(false);
     }
   };
+
+  const getQuote = async () => {
+    try {
+      setLoading(true);
+      setTitle('Edit Quote');
+      const response = await axiosApi.get<ApiQuotes>(`/quotes/${params.id}.json`);
+      setEditQuote(response.data);
+    } catch (error: Error) {
+      getError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+    useEffect(() => {
+      if (params.id) {
+        void getQuote();
+      }
+    }, [params.id]);
+
 
   return (
     <>

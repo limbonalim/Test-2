@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink, Outlet, useParams} from 'react-router-dom';
 import QuoteList from '../../components/QuoteList/QuoteList';
+import {categories} from '../../constans';
 
 interface Props {
   getError: (message: string) => void;
@@ -8,19 +9,21 @@ interface Props {
 
 const Home: React.FC<Props> = ({getError}) => {
   const params = useParams();
+  const listOfLink = categories.map((item) => {
+    const link: string = `quotes/${item.id}`;
+    return (
+      <NavLink key={item.id} to={link} className="list-group-item">{item.title}</NavLink>
+    );
+  });
   return (
     <div className="row">
-      <div className="col-3">
+      <div className="col-4">
         <div className="list-group">
           <NavLink to="/" className="list-group-item">All</NavLink>
-          <NavLink to="quotes/star-wars" className="list-group-item">Star Wars</NavLink>
-          <NavLink to="quotes/motivational" className="list-group-item">Motivational</NavLink>
-          <NavLink to="quotes/famous-people" className="list-group-item">Famous People</NavLink>
-          <NavLink to="quotes/humour" className="list-group-item">Humour</NavLink>
-          <NavLink to="quotes/philosophy" className="list-group-item">Philosophy</NavLink>
+          {listOfLink}
         </div>
       </div>
-      <div className="col-9">
+      <div className="col-8">
         {params.category ? null : <QuoteList getError={getError}/>}
         <Outlet/>
       </div>

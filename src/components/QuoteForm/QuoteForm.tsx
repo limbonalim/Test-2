@@ -9,39 +9,37 @@ interface Props {
   editQuote?: ApiQuotes;
 }
 
-const MemoQuoteForm: React.FC<Props> = React.memo(function QuoteForm({onSubmit, onEdit, editQuote}) {
+const MemoQuoteForm: React.FC<Props> = ({onSubmit, onEdit, editQuote}) => {
   const [post, setPost] = useState<ApiQuotes>({
     author: '',
     category: '',
     text: '',
   });
   const [button, setButton] = useState<string>('Add');
-
-  let params = useParams();
-  console.log(params);
-
-  if (params.id) {
-    const getEditPost = useCallback(() => {
-      setButton('Edit');
-      setPost(prevState => {
-        return {
-          ...prevState,
-          author: editQuote.author,
-          category: editQuote.category,
-          text: editQuote.text
-        };
-      });
-
-    }, [editQuote.author, editQuote.text]);
-    useEffect(() => {
-      void getEditPost();
-    }, [getEditPost]);
-  }
-
-
+  const params = useParams();
   const listOfOptions = categories.map((item: Constants) => (
     <option key={item.id} value={item.id}>{item.title}</option>
   ));
+
+  const getEditPost = useCallback(() => {
+    if (editQuote) {
+      setButton('Edit');
+      setPost(
+        {
+          author: editQuote.author,
+          category: editQuote.category,
+          text: editQuote.text
+        }
+      );
+    }
+  }, [editQuote?.author, editQuote?.text]);
+
+  useEffect(() => {
+    if (params.id) {
+      void getEditPost();
+    }
+  }, [getEditPost]);
+
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const {name, value} = event.target;
@@ -53,7 +51,7 @@ const MemoQuoteForm: React.FC<Props> = React.memo(function QuoteForm({onSubmit, 
 
   const onFormSubmit = (event: FormEvent) => {
     event.preventDefault();
-    if (editQuote.author && editQuote.text) {
+    if (editQuote?.author && editQuote.text) {
       onEdit(post);
     } else {
       onSubmit(post);
@@ -74,14 +72,12 @@ const MemoQuoteForm: React.FC<Props> = React.memo(function QuoteForm({onSubmit, 
         <select
           onChange={onChange}
           value={post.category}
-          defaultValue=""
           required
           id="category"
           name="category"
           className="form-select"
           aria-label="Category"
         >
-          <option value="" disabled>Select Category</option>
           {listOfOptions}
         </select>
       </div>
@@ -114,6 +110,6 @@ const MemoQuoteForm: React.FC<Props> = React.memo(function QuoteForm({onSubmit, 
       <button className="btn btn-outline-success">{button}</button>
     </form>
   );
-});
+};
 
 export default MemoQuoteForm;
