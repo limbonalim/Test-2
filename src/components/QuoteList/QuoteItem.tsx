@@ -17,8 +17,8 @@ const MemoQuoteItem: React.FC<Props> = React.memo(function QuoteItem({message, a
         <p>{message}</p>
         <span className="fw-bold">- {author}</span>
       </div>
-      <div>
-        <button className="btn btn-outline-danger m-2" onClick={() => onDelete(id)}>Delete</button>
+      <div className="d-flex align-items-start gap-2">
+        <button className="btn btn-outline-danger" onClick={() => onDelete(id)}>Delete</button>
         <Link to={link} className="btn btn-outline-info">Edit</Link>
       </div>
     </div>
