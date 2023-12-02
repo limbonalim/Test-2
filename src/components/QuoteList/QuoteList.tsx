@@ -2,10 +2,16 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import MemoQuoteItem from './QuoteItem';
 import axiosApi from '../../axios-api';
+import Loading from '../Loading/Loading';
 import {ApiQuotes, Quotes} from '../../types';
 
+interface Props {
+  getError: (message: string) => void;
+}
 
-const QuoteList = () => {
+
+const QuoteList: React.FC<Props> = ({getError}) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const params = useParams();
   let url: string = '/quotes.json';
   const [quotes, setQuotes] = useState<Quotes[]>([]);
@@ -16,6 +22,7 @@ const QuoteList = () => {
 
   const getItems = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await axiosApi.get<ApiQuotes>(url);
       const listOfItems: Quotes[] = [];
       for (let item in response.data) {
@@ -24,7 +31,9 @@ const QuoteList = () => {
       }
       setQuotes(listOfItems);
     } catch (error: Error) {
-      console.log(error);
+      getError(error.message);
+    } finally {
+      setLoading(false);
     }
   }, [params]);
 
@@ -34,10 +43,13 @@ const QuoteList = () => {
 
   const onDelete = async (id: string) => {
     try {
+      setLoading(true);
       await axiosApi.delete(`/quotes/${id}.json`);
       void getItems();
     } catch (error: Error) {
-      console.log(error);
+      getError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +64,7 @@ const QuoteList = () => {
 
   return (
     <div className="d-flex flex-column gap-2">
-      {list}
+      {loading ? <Loading/> : list}
     </div>
   );
 };

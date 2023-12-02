@@ -2,7 +2,11 @@ import React from 'react';
 import {NavLink, Outlet, useParams} from 'react-router-dom';
 import QuoteList from '../../components/QuoteList/QuoteList';
 
-const Home = () => {
+interface Props {
+  getError: (message: string) => void;
+}
+
+const Home: React.FC<Props> = ({getError}) => {
   const params = useParams();
   return (
     <div className="row">
@@ -17,7 +21,7 @@ const Home = () => {
         </div>
       </div>
       <div className="col-9">
-        {params.category ? null : <QuoteList/>}
+        {params.category ? null : <QuoteList getError={getError}/>}
         <Outlet/>
       </div>
     </div>
